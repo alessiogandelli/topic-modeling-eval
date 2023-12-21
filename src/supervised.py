@@ -61,14 +61,14 @@ def get_test_dataset(path: str):
 
 
 
-    df['text'] = df['text'].str.replace(r'RT', '', case=False)
-    df['text'] = df['text'].str.replace(r'\n', '', case=False)
-    df['text'] = df['text'].str.replace(r'http\S+', '', case=False) # remove urls
+    df['text'] = df['text'].str.replace(r'RT', '', regex=True, case=False) # remove RT
+    df['text'] = df['text'].str.replace(r'\n', '', regex=True, case=False) # remove \n
+    df['text'] = df['text'].str.replace(r'http\S+', '', regex=True, case=False) # remove urls
 
     df = df[df['lang'] == 'en'] # remove non english tweets
 
     df_nohash = df.copy()
-    df_nohash['text'] = df_nohash['text'].str.replace(r'#\S+', '', case=False)
+    df_nohash['text'] = df_nohash['text'].str.replace(r'#\S+', '', regex=True, case=False)
 
     return df, df_nohash
 
@@ -93,7 +93,7 @@ def preprocess_text(text):
 
 class Evaluator:
 
-    def __init__(self, dataset, name, nr_topics = 'auto', min_topic_size = 50, n_iter=1):
+    def __init__(self, dataset, name, nr_topics = 'auto', min_topic_size = 50, n_iter=2):
         '''
         dataset: dataframe with the tweets
         name: name of the embedding model, if name is openai use openai api ( openai, NMF, GSDMM, every sentence transformer model)
@@ -117,6 +117,7 @@ class Evaluator:
         self.topic_share = []
 
         self.evaluate()             # create embeddings 
+        self.get_accuracy()         # get accuracy
 
     # given name of the model compute the embeddings, if name is openai use openai api 
     # else only sentence tranformer are allowed
@@ -153,7 +154,7 @@ class Evaluator:
             print('iteration ', i)
             if model in model_methods:
                 model_methods[model](n=i)  # create model ( takes the model from the dictionary model_methods)
-                self.get_accuracy()  # get accuracy
+                #self.get_accuracy()  # get accuracy
             
 
     # create topic model with bertopic and update the dataframe with the inferred topics 
@@ -229,6 +230,7 @@ class Evaluator:
             results_no_outliers = {}
             topic_share = {}
             # every my_topic should have >77 % pf the documents of topic
+            print(df)
             for topic in my_topics:
                 res = df[df['my_topics_'+str(i)] == topic].value_counts('topic') 
                 if topic != -1:
@@ -269,9 +271,13 @@ class Evaluator:
         reduced_embeddings = UMAP(n_neighbors=10, n_components=2, min_dist=0.0, metric='cosine').fit_transform(self.embeddings)
         return self.model.visualize_documents(self.docs, reduced_embeddings=reduced_embeddings)
 
-    def visualize_heatmap(self, n=0):
-        return sns.heatmap(pd.crosstab(self.df['topic'], self.df['my_topics_'+str(n)]), annot=True, cmap="YlGnBu", fmt='g').set_title(self.name)
-    
+    def visualize_heatmap(self, n=0, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        sns.heatmap(pd.crosstab(self.df['topic'], self.df['my_topics_'+str(n)]), annot=True, cmap="YlGnBu", fmt='g', ax=ax)
+        ax.set_title(self.name)
+        return ax
+        
     def visualize_min_topic_share(self):
 
         # create a figure and axis
