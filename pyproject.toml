@@ -6,7 +6,7 @@ authors = ["alessiogandelli <alessiogandelli99@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.9.6"
+python = "3.11.6"
 pandas = "^2.1.0"
 matplotlib = "^3.7.2"
 python-dotenv = "^1.0.0"
@@ -17,6 +17,7 @@ bertopic = "^0.16.0"
 openai = "^1.5.0"
 gsdmm = {git = "https://github.com/rwalk/gsdmm.git"}
 contractions = "^0.1.73"
+tweets-to-topic-network = "^0.1.1"
 
 
 

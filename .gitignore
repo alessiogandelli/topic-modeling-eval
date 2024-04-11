@@ -132,3 +132,5 @@ models/
 
 .DS_Store
 data/
+
+qdrant_storage
