@@ -17,7 +17,7 @@ file_user = '/Users/alessiogandelli/data/' + n_cop + '/users_'+ n_cop+'.json'
 # file_user = '/Users/alessiogandelli/dev/uni/tweets-to-topic-network/data/toy_users.json'
 
 #%%
-data = Data_processor(file_tweets, file_user, '22')
+data = Data_processor(file_tweets=file_tweets, file_user=file_user, n_cop='22')
 data.process_json()
 
 tm = Topic_modeler(data.df_original, name = data.name, embedder_name='all-MiniLM-L6-v2', path_cache = data.path_cache)
@@ -27,6 +27,7 @@ df_labeled = tm.get_topics()
 df_retweet_labeled = data.update_df(df_labeled)
 
 nw = Network_creator(df_retweet_labeled, name = data.name, path = data.folder)
+
 G = nw.create_retweet_network()
 nw.create_ttnetwork()
 nw.create_retweet_ml()
