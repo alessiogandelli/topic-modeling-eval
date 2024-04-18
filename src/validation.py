@@ -1,6 +1,5 @@
 #%%
 import pandas as pd 
-from utils import get_random_string
 from dotenv import load_dotenv
 import os
 
@@ -20,30 +19,28 @@ file_user = '/Users/alessiogandelli/data/' + n_cop + '/users_'+ n_cop+'.json'
 data = Data_processor(file_tweets=file_tweets, file_user=file_user, n_cop='22')
 data.process_json()
 
-tm = Topic_modeler(data.df_original, name = data.name, embedder_name='all-MiniLM-L6-v2', path_cache = data.path_cache)
+tm = Topic_modeler(data.df_original, name = data.name + 'bai', embedder_name='BAAI/bge-base-en-v1.5', path_cache = data.path_cache)
 df_labeled = tm.get_topics()
 
 #%%
-df_retweet_labeled = data.update_df(df_labeled)
 
-nw = Network_creator(df_retweet_labeled, name = data.name, path = data.folder)
-
-G = nw.create_retweet_network()
-nw.create_ttnetwork()
-nw.create_retweet_ml()
+tm = Topic_modeler(data.df_original, name = data.name + 'multilingual_paraphrase', embedder_name='paraphrase-multilingual-MiniLM-L12-v2', path_cache = data.path_cache)
+df_labeled = tm.get_topics()
 
 
 
 
 
 
+#%%
+
+tm.model.visualize_topics()
 
 
 
+#%%
 
-
-
-
+tm.model.visualize_documents(tm.df['text'], embeddings=tm.embeddings)
 
 
 
@@ -69,3 +66,4 @@ nw.create_retweet_ml()
 
 
 
+# %%

@@ -1,0 +1,134 @@
+function createButton(label, tweet) {
+    const button = document.createElement('button');
+    button.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    button.className = label;
+    button.addEventListener('click', () => labelTweet(tweet, label));
+    return button;
+}
+
+function labelTweet(tweet, label) {
+    fetch('/label_tweet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ tweet: tweet, label: label }),
+    }).then(() => {
+        // After labeling the tweet, fetch a new one
+        updateDocs(); // assuming 'topic' is the topic you want to fetch tweets for
+    });
+
+   
+}
+
+
+
+window.onload = function () {
+    populateTopics();
+    fetch('/get_tweet')
+        .then(response => response.json())
+        .then(data => {
+            const documentsDiv = document.getElementById('documents');
+            const tweetDiv = document.createElement('div');
+            tweetDiv.textContent = data.tweet; // assuming the tweet text is in a 'tweet' property
+            documentsDiv.appendChild(tweetDiv);
+        })
+        .catch(error => console.error('Error:', error));
+
+};
+
+function populateTopics() {
+    fetch('/get_topics')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('topic-selector');
+            for (const key in data) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.text = data[key];
+                select.appendChild(option);
+            }
+
+            select.addEventListener('change', function () {
+                let selectedTopic = this.value;
+                // if selected topic is an integer, it will be the index of the selected option
+
+                if (selectedTopic === '') {
+                    return;
+                }
+
+                selectedTopic = parseInt(selectedTopic);
+                if (Number.isInteger(selectedTopic)) {
+                    updateDocs();
+                }
+                
+            });
+        });
+}
+
+function updateDocs() {
+
+    const topic = document.getElementById('topic-selector').value;
+
+    console.log('Fetching tweet for topic:', topic);
+
+    fetch(`/get_tweet?topic=${encodeURIComponent(topic)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data);
+
+            const documentsDiv = document.getElementById('documents');
+            if (!documentsDiv) {
+                console.error('Could not find the "documents" div');
+                return;
+            }
+
+            documentsDiv.innerHTML = ''; // Clear any existing documents
+
+            const tweetElement = createTweet(data);
+            if (!tweetElement) {
+                console.error('createTweet did not return a valid element');
+                return;
+            }
+
+            documentsDiv.appendChild(tweetElement);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function createTweet(data) {
+    console.log(data);
+    const tweetDiv = document.createElement('div');
+    tweetDiv.className = 'tweet';
+    tweetDiv.dataset.id = data.id; // Store the id as a data attribute
+
+
+    const tweetText = document.createElement('p');
+    tweetText.textContent = data.text || 'No text provided';
+    tweetDiv.appendChild(tweetText);
+
+    const positiveButton = document.createElement('button');
+    positiveButton.className = 'positive';
+    positiveButton.textContent = 'Positive';
+    positiveButton.addEventListener('click', () => labelTweet(data.id, 'positive'));
+    tweetDiv.appendChild(positiveButton);
+
+    const neutralButton = document.createElement('button');
+    neutralButton.className = 'neutral';
+    neutralButton.textContent = 'Neutral';
+    neutralButton.addEventListener('click', () => labelTweet(data.id, 'neutral'));
+    tweetDiv.appendChild(neutralButton);
+
+    const negativeButton = document.createElement('button');
+    negativeButton.className = 'negative';
+    negativeButton.textContent = 'Negative';
+    negativeButton.addEventListener('click', () => labelTweet(data.id, 'negative'));
+    tweetDiv.appendChild(negativeButton);
+
+    return tweetDiv;
+}
