@@ -114,19 +114,19 @@ function createTweet(data) {
 
     const positiveButton = document.createElement('button');
     positiveButton.className = 'positive';
-    positiveButton.textContent = 'Positive';
+    positiveButton.textContent = 'Correct';
     positiveButton.addEventListener('click', () => labelTweet(data.id, 'positive'));
     tweetDiv.appendChild(positiveButton);
 
     const neutralButton = document.createElement('button');
     neutralButton.className = 'neutral';
-    neutralButton.textContent = 'Neutral';
+    neutralButton.textContent = 'not clear';
     neutralButton.addEventListener('click', () => labelTweet(data.id, 'neutral'));
     tweetDiv.appendChild(neutralButton);
 
     const negativeButton = document.createElement('button');
     negativeButton.className = 'negative';
-    negativeButton.textContent = 'Negative';
+    negativeButton.textContent = 'Wrong';
     negativeButton.addEventListener('click', () => labelTweet(data.id, 'negative'));
     tweetDiv.appendChild(negativeButton);
 
