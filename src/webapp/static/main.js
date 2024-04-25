@@ -37,11 +37,19 @@ window.onload = function () {
 
 };
 
+
 function populateTopics() {
     fetch('/get_topics')
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById('topic-selector');
+
+            // Create default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.text = 'Select a Topic';
+            select.appendChild(defaultOption);
+
             for (const key in data) {
                 const option = document.createElement('option');
                 option.value = key;
@@ -51,7 +59,6 @@ function populateTopics() {
 
             select.addEventListener('change', function () {
                 let selectedTopic = this.value;
-                // if selected topic is an integer, it will be the index of the selected option
 
                 if (selectedTopic === '') {
                     return;

@@ -1,0 +1,142 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0 2%; /* Add horizontal padding */
+}
+
+#documents {
+    width: 100%;
+    max-width: 800px; /* Adjust this value to suit your design */
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tweet {
+    background-color: #f5f8fa;
+    border: 1px solid #e1e8ed;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+
+}
+
+.tweet button {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 11px;
+    width: 80px;
+}
+
+.tweet button:hover {
+    opacity: 0.8;
+}
+
+.tweet .positive {
+    background-color: #4CAF50;
+    /* Green */
+}
+
+.tweet .neutral {
+    background-color: #EED202;
+    /* Yellow */
+}
+
+.tweet .negative {
+    background-color: #f44336;
+    /* Red */
+}
+
+#topic-selector {
+    width: 100% !important;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f8fa;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#topic-selector:hover {
+    border-color: #999;
+}
+
+#topic-selector:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+@media (min-width: 1500px) {
+    body {
+        padding: 0 10%; /* Adjust horizontal padding for larger screens */
+    }
+}
+.my-dataframe {
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+
+.my-dataframe th, .my-dataframe td {
+    border: 1px solid #958f8f;
+    padding: 8px;
+}
+
+.my-dataframe tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.my-dataframe th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.scrollable-table {
+    height: 90%;  /* Adjust as needed */
+    overflow-y: auto;
+    display: block;
+    width: 100%;
+}
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.fixed-bottom a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.fixed-bottom .page-number {
+    display: inline-block;
+    margin: 0 10px;
+}
