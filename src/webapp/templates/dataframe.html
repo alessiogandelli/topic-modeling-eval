@@ -10,6 +10,14 @@
         <input type="text" id="columns" name="columns" placeholder="column1,column2,column3">
         <input type="submit" value="Update">
     </form>
+    <form id="topic-selector">
+        <select name="topic">
+            {% for topic in topics %}
+                <option value="{{ topic }}">{{ topic }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Select Topic">
+    </form>
     <div class="scrollable-table">
         {{ table|safe }}
     </div>

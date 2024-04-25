@@ -61,24 +61,26 @@ def label_tweet():
 def get_dataframe():
     """Returns an HTML table containing a portion of the DataFrame."""
     page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=100, type=int)  # Adjust this value as needed
-    columns = request.args.get('columns')  # New line
-    topic = request.args.get('topic')  # New line
+    per_page = request.args.get('per_page', default=100, type=int)
+    columns = request.args.get('columns')
+    topic = request.args.get('topic')
 
     start = (page - 1) * per_page
     end = start + per_page
 
     if columns is not None:
-        columns = columns.split(',')  # Split the columns parameter into a list
-        df_subset = df_tweets[columns]  # Select only the specified columns
+        columns = columns.split(',')
+        df_subset = df_tweets[columns]
     else:
         df_subset = df_tweets
 
     if topic is not None:
-        df_subset = df_subset[df_subset['topic'] == int(topic)]  # Filter the DataFrame based on the topic
+        df_subset = df_subset[df_subset['topic'] == int(topic)]
+
+    topics = df_tweets['topic'].unique().tolist()  # Get the unique topics
 
     table = df_subset[start:end].to_html(classes='my-dataframe')
-    return render_template('dataframe.html', table=table, page=page)
+    return render_template('dataframe.html', table=table, page=page, topics=topics)  #
 
 
 if __name__ == '__main__':

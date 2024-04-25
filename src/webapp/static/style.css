@@ -140,3 +140,9 @@ body {
     display: inline-block;
     margin: 0 10px;
 }
+
+#topic-selector,
+#view-dataframe {
+    display: inline-block;
+    margin-right: 10px;
+}

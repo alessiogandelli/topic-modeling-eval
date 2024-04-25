@@ -139,3 +139,8 @@ function createTweet(data) {
 
     return tweetDiv;
 }
+
+document.getElementById('view-dataframe').addEventListener('click', function() {
+    var topic = document.getElementById('topic-selector').value;
+    window.location.href = '/get_df?topic=' + encodeURIComponent(topic);
+});
